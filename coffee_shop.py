@@ -51,6 +51,9 @@ def simulate_shop(months):
         revenue = materials_manager.income()
         barista_cost = barista_manager.barista_cost()
         storages_cost = materials_manager.storage_cost()
+        print(revenue)
+        print(barista_cost)
+        print(storages_cost)
 
         # 更新现金流
         cash += revenue - barista_cost - storages_cost - materials_cost - 1500
@@ -66,4 +69,4 @@ def simulate_shop(months):
             print(f"        Barista {name}, hourly rate=15\n")
 
         # 更新下一个月月初库存
-        # current_materials =materials_manager.update_storage()
+        current_materials =materials_manager.update_storage()
