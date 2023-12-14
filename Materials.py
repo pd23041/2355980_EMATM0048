@@ -34,16 +34,29 @@ class MaterialsManager:
             print(f'{coffee_name} is a invalid input, re-enter the coffee name')
 
     # 判断材料需求  劳动力是否足够
-    def materials_demand(self, labour):
+    def materials_demand(self, labour, baristas):
         beans_need = 0
         milk_need = 0
         spices_need = 0
-
+        rate = 1
         for name, amount in self.demand.items():
             coffee = self.coffee_types[name]
             # 检查劳动力不足 且原料不足的情况
             amount = IJ.change_demand_poistives(amount, input(f'{name}, demand {amount}, how much to sell: '))
-            if labour < coffee['time'] * amount:
+
+            # 遍历咖啡师 判断是否有该咖啡的专业咖啡师 若有则时间减半 无则维持不变
+            for _, detail in baristas.items():
+                if name == detail['special_type']:
+                    rate = 0.5
+                    break
+                else:
+                    rate = 1.0
+
+            # 打印参数 以便判断
+            print(baristas)
+            print(rate)
+
+            if labour < coffee['time'] * amount * rate:
                 capacity = labour // coffee['time']
                 print(f'Insufficient labour: quantity requested {amount}, capacity {capacity}')
                 amount = IJ.change_demand_poistives(capacity, input(f'{name}, demand {amount}, how much to sell: '))
@@ -67,6 +80,7 @@ class MaterialsManager:
                 milk_needed = coffee.get('milk', 0) * amount
                 beans_needed = coffee.get('beans', 0) * amount
                 spices_needed = coffee.get('spices', 0) * amount
+
             # 更新demand
             self.update_demand(name, amount)
 
@@ -76,7 +90,7 @@ class MaterialsManager:
             self.storages['spices']['volume'] -= spices_needed
 
             # 更新劳动力
-            labour -= coffee['time'] * amount
+            labour -= coffee['time'] * amount * rate
 
             # 更新总需求
             beans_need += beans_needed

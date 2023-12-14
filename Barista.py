@@ -3,15 +3,15 @@ class BaristaManager:
         self.barista = {}
         self.hourly_rate = 15
 
-    # 招聘咖啡师
-    def add_barista(self, name, month):
+    # 招聘咖啡师 更新专业咖啡师
+    def add_barista(self, name, month, is_special=False, special_type=None):
         if len(self.barista) >= 4: # 咖啡师人数必须[1,4]
             print('At full capacity')
         elif self.barista and name in self.barista: # 判断是否已经存在
             print('barista already exists')
             self.barista[name] = self.add_barista(input('Type again\n'), month) # 若输入错误，提示重新输入。
         else:
-            self.barista[name] = {'hourly rate': self.hourly_rate}
+            self.barista[name] = {'hourly rate': self.hourly_rate, 'is_special': is_special, 'special_type': special_type}
             print(f'Added {name}, hourly rate=15 in month {month}')  # 这里的month要for
 
     # 解聘咖啡师
@@ -38,4 +38,4 @@ class BaristaManager:
 
     # 展示咖啡师 以及 人数
     def show_barista(self):
-        return self.barista.keys(), len(self.barista)
+        return self.barista

@@ -19,7 +19,7 @@ def simulate_shop(months):
     expend_manager = SC.ExpenditureManager(materials_manager)
     for month in range(1, months+1):
         print(f"====================================")
-        print(f"===== SIMULATING MONTH {month} =====")
+        print(f"======== SIMULATING MONTH {month} ========")
         print(f"====================================")
 
         # 每个月最初的存量
@@ -32,11 +32,19 @@ def simulate_shop(months):
             print('Not enough money, bankrupt.')
             break
 
-        # 添加咖啡师
+        # 添加咖啡师 并判断是否有专长
         barista_number = IJ.get_poistives(input('>>> Enter number of barists: \n'))
         for i in range(int(barista_number)):
             name = input('Enter barista name.\n')
-            barista_manager.add_barista(name, month)
+            special = input('Does the barista have a special? (y/n):')
+            if special == 'y':
+                special_type = input('Enter the special coffee type: ')
+                barista_manager.add_barista(name, month, is_special=True, special_type=special_type)
+            else:
+                barista_manager.add_barista(name, month, is_special=False, special_type=None)
+
+        # 导出咖啡师的参数 并将参数导入到材料管理类中
+        baristas = barista_manager.show_barista()
 
         # 计算每个月的劳动力  并将劳动力带入判断
         labour = barista_manager.get_barista_labour()
@@ -45,15 +53,13 @@ def simulate_shop(months):
         for name, number in demand.items():
             materials_manager.update_demand(name, number)
 
-        materials_manager.materials_demand(labour)
+        # 导入咖啡师参数 根据咖啡师判断制作时间是否减半
+        materials_manager.materials_demand(labour, baristas)
 
         # 计算收支
         revenue = materials_manager.income()
         barista_cost = barista_manager.barista_cost()
         storages_cost = materials_manager.storage_cost()
-        print(revenue)
-        print(barista_cost)
-        print(storages_cost)
 
         # 更新现金流
         cash += revenue - barista_cost - storages_cost - materials_cost - 1500
@@ -64,7 +70,8 @@ def simulate_shop(months):
         for material, info in current_materials.items():
             print(f"        {material}, {info['volume']:.2f} (capacity={info['max_volume']})")
         print("     Baristas")
-        barista_names, barista_count = barista_manager.show_barista()
+        barista_names= barista_manager.show_barista()
+        print(barista_names)
         for name in barista_names:
             print(f"        Barista {name}, hourly rate=15\n")
 
