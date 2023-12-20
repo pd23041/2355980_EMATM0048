@@ -1,11 +1,12 @@
 import Barista as Br
 import Materials as Mat
+import Cash
 import InputJudgment as IJ
 import SupplierCost as SC
 
 
 def simulate_shop(months):
-    cash = 10000
+    # cash = 10000
     demand = {
             'Espresso': 500,
             'Americano': 200,
@@ -17,10 +18,16 @@ def simulate_shop(months):
     barista_manager = Br.BaristaManager()
     materials_manager = Mat.MaterialsManager()
     expend_manager = SC.ExpenditureManager(materials_manager)
+    cash = Cash.Cash()
+
     for month in range(1, months+1):
         print(f"====================================")
         print(f"======== SIMULATING MONTH {month} ========")
         print(f"====================================")
+
+        # 月初资金
+        cash_begin = cash.cash_begin()
+        print(cash_begin)
 
         # 每个月最初的存量
         current_materials = materials_manager.show_storage()
@@ -28,7 +35,7 @@ def simulate_shop(months):
         # 填充原料并计算成本
         materials_cost = expend_manager.supplier_cost(current_materials)
 
-        if materials_cost > cash:
+        if materials_cost > cash_begin:
             print('Not enough money, bankrupt.')
             break
 
@@ -36,6 +43,7 @@ def simulate_shop(months):
         barista_number = IJ.get_poistives(input('>>> Enter number of barists: \n'))
         for i in range(int(barista_number)):
             name = input('Enter barista name.\n')
+            name = barista_manager.is_exist(name)
             special = input('Does the barista have a special? (y/n):')
             if special == 'y':
                 special_type = input('Enter the special coffee type: ')
@@ -62,10 +70,11 @@ def simulate_shop(months):
         storages_cost = materials_manager.storage_cost()
 
         # 更新现金流
-        cash += revenue - barista_cost - storages_cost - materials_cost - 1500
+        cash_end = cash.cash_end(revenue, barista_cost, storages_cost, materials_cost)
 
+        # 打印最终信息
         print(f"=== FINAL STATE month {month} ===")
-        print(f"Shop Name: Boost, Cash: {cash:.2f}")
+        print(f"Shop Name: Boost, Cash: {cash_end:.2f}")
         print("     Pantry")
         for material, info in current_materials.items():
             print(f"        {material}, {info['volume']:.2f} (capacity={info['max_volume']})")

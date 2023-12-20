@@ -46,7 +46,7 @@ class MaterialsManager:
 
             # 遍历咖啡师 判断是否有该咖啡的专业咖啡师 若有则时间减半 无则维持不变
             for _, detail in baristas.items():
-                if name == detail['special_type']:
+                if name == detail['special_type']:  # 这里有个问题，如果
                     rate = 0.5
                     break
                 else:
