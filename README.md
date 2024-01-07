@@ -25,3 +25,5 @@
     V1.0.0：
       1. Realization of basic functions.
       2. Missing automatic simulation operation function.
+    V1.0.1:
+      1. Updated recruitment barista judgment logic to prevent interruptions caused by null values.
