@@ -2,7 +2,7 @@ import InputJudgment as IJ
 
 class MaterialsManager:
     def __init__(self):
-        # 定义咖啡种类 价格 时间 配料
+        # Define Coffee Type Price Time Ingredients
         self.coffee_types = {
             'Espresso': {'time': 3, 'beans': 8, 'milk': 0, 'spices': 0, 'price': 1.5},
             'Americano': {'time': 2, 'beans': 6, 'milk': 0, 'spices': 0, 'price': 2.5},
@@ -26,14 +26,14 @@ class MaterialsManager:
             'spices': 0
         }
 
-    # 计算在劳动力内能卖多少咖啡 以及所需要的原料
+    # Calculate how much coffee can be sold within the labor force and what ingredients are needed
     def update_demand(self, coffee_name, amount):
         if coffee_name in self.coffee_types:
             self.demand[coffee_name] = amount
         else:
             print(f'{coffee_name} is a invalid input, re-enter the coffee name')
 
-    # 判断材料需求  劳动力是否足够
+    # Determine material requirements Labor adequacy
     def materials_demand(self, labour, baristas):
         beans_need = 0
         milk_need = 0
@@ -41,18 +41,18 @@ class MaterialsManager:
         rate = 1
         for name, amount in self.demand.items():
             coffee = self.coffee_types[name]
-            # 检查劳动力不足 且原料不足的情况
+            # Checking labor shortages and raw material shortages
             amount = IJ.change_demand_poistives(amount, input(f'{name}, demand {amount}, how much to sell: '))
 
-            # 遍历咖啡师 判断是否有该咖啡的专业咖啡师 若有则时间减半 无则维持不变
+            # Iterate over baristas Determine if there is a specialty barista for this coffee
             for _, detail in baristas.items():
-                if name == detail['special_type']:  # 这里有个问题，如果
+                if name == detail['special_type']:
                     rate = 0.5
                     break
                 else:
                     rate = 1.0
 
-            # 打印参数 以便判断
+            # Print parameters for judgment
             # print(baristas)
             # print(rate)
 
@@ -62,7 +62,7 @@ class MaterialsManager:
                 amount = IJ.change_demand_poistives(capacity, input(f'{name}, demand {amount}, how much to sell: '))
                 # self.demand[name] = amount
 
-            # 满足劳动力的同时  计算每种咖啡所需要的原料 判断原料是否充足
+            # Determining the adequacy of raw materials
             milk_needed = coffee.get('milk', 0) * amount
             beans_needed = coffee.get('beans', 0) * amount
             spices_needed = coffee.get('spices', 0) * amount
@@ -81,7 +81,7 @@ class MaterialsManager:
                 beans_needed = coffee.get('beans', 0) * amount
                 spices_needed = coffee.get('spices', 0) * amount
 
-            # 更新demand
+            # Update Demand
             self.update_demand(name, amount)
 
             # 实时更新库存
@@ -89,35 +89,35 @@ class MaterialsManager:
             self.storages['beans']['volume'] -= beans_needed
             self.storages['spices']['volume'] -= spices_needed
 
-            # 更新劳动力
+            # Updating the labor force
             labour -= coffee['time'] * amount * rate
 
-            # 更新总需求
+            # Renewal of total material requirements
             beans_need += beans_needed
             milk_need += milk_needed
             spices_need += spices_needed
 
         return milk_need, beans_need, spices_need
 
-    # 打印月尾时的库存存量
+    # Print the inventory stock at the end of the month
     def show_storage(self):
         return self.storages
 
-    # 计算仓储支出
+    # Calculation of warehousing expenditures
     def storage_cost(self):
         cost = 0
         for name in self.pantry:
             cost += self.storages[name]['volume'] * self.storages[name]['pantry']
         return cost
 
-    # 计算所有咖啡销售的总收入
+    # Calculate total revenue from all coffee sales
     def income(self):
         revenue = 0
         for name, amount in self.demand.items():
             revenue += self.coffee_types[name]['price'] * amount
         return revenue
 
-    # 每个月月初根据折损率更新库存 根据此数据跟供应商进货
+    # Update inventory based on discount rate
     def update_storage(self):
         for name, depre in self.storages.items():
             if depre['volume'] >= 0:

@@ -27,3 +27,8 @@
       2. Missing automatic simulation operation function.
     V1.0.1:
       1. Updated recruitment barista judgment logic to prevent interruptions caused by null values.
+    V1.0.2:
+        1. Updated Barista reduced function. Optimized code.
+    V2.0.0:
+        Updated all feature notes.
+

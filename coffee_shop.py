@@ -5,6 +5,7 @@ import InputJudgment as IJ
 import SupplierCost as SC
 
 
+# Simulation of a six-month run of a coffee shop
 def simulate_shop(months):
     # cash = 10000
     demand = {
@@ -20,58 +21,61 @@ def simulate_shop(months):
     expend_manager = SC.ExpenditureManager(materials_manager)
     cash = Cash.Cash()
 
+    # Simulation of a six-month run of a coffee shop
     for month in range(1, months+1):
         print(f"====================================")
         print(f"======== SIMULATING MONTH {month} ========")
         print(f"====================================")
 
-        # 月初资金
+        # Funds at the beginning of the month
         cash_begin = cash.cash_begin()
         print(cash_begin)
 
-        # 每个月最初的存量
+        # Inventory at the beginning of each month
         current_materials = materials_manager.show_storage()
 
-        # 填充原料并计算成本
+        # Fill the raw materials and calculate the cost
         materials_cost = expend_manager.supplier_cost(current_materials)
 
+        # Determining the adequacy of funds
         if materials_cost > cash_begin:
             print('Not enough money, bankrupt.')
             break
 
-        # 添加咖啡师 并判断是否有专长
+        # Add a barista and determine if you have a specialty
         barista_number = IJ.get_poistives(input('>>> Enter the number of recruitment baristas: \n'))
         for i in range(int(barista_number)):
             barista_manager.hire_barista(month)
 
+        # terminate the baristas and how many to terminate.
         fire_barista_option = input('Do you want to fire a barista? (y/n): ')
         if fire_barista_option.lower() == 'y':
             number = IJ.get_poistives(input('>>> Enter number of barists: \n'))
             for i in range(number):
                 barista_manager.fire_barista()
 
-        # 导出咖啡师的参数 并将参数导入到材料管理类中
+        # Exporting barista parameters and importing them into the material management class
         baristas = barista_manager.show_barista()
 
-        # 计算每个月的劳动力  并将劳动力带入判断
+        # Calculate the labor force for each month and bring the labor force into the judgment
         labour = barista_manager.get_barista_labour()
 
-        # 更新demand需求
+        # Updating Demand
         for name, number in demand.items():
             materials_manager.update_demand(name, number)
 
-        # 导入咖啡师参数 根据咖啡师判断制作时间是否减半
+        # Import barista parameters Judge whether to halve the production time based on the barista
         materials_manager.materials_demand(labour, baristas)
 
-        # 计算收支
+        # Calculation of income and expenditure
         revenue = materials_manager.income()
         barista_cost = barista_manager.barista_cost()
         storages_cost = materials_manager.storage_cost()
 
-        # 更新现金流
+        # Renewal of cash
         cash_end = cash.cash_end(revenue, barista_cost, storages_cost, materials_cost)
 
-        # 打印最终信息
+        # Print store business information
         print(f"=== FINAL STATE month {month} ===")
         print(f"Shop Name: Boost, Cash: {cash_end:.2f}")
         print("     Pantry")
@@ -83,5 +87,6 @@ def simulate_shop(months):
         for name in barista_names:
             print(f"        Barista {name}, hourly rate=15\n")
 
-        # 更新下一个月月初库存
+        # Updated inventory for the beginning of the next month
         current_materials =materials_manager.update_storage()
+        return current_materials

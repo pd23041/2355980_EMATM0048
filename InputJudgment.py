@@ -1,3 +1,4 @@
+# Determine if the input is legal Contains a range of values
 def get_poistives(number):
     while True:
         try:
@@ -13,7 +14,7 @@ def get_poistives(number):
             return get_poistives(input())
 
 
-# 判断输入是否合法 包含取值范围
+# Determine if the input is legal Contains a range of values
 def change_demand_poistives(number, change_demand):
     while True:
         try:
