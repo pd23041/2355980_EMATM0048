@@ -40,16 +40,15 @@ def simulate_shop(months):
             break
 
         # 添加咖啡师 并判断是否有专长
-        barista_number = IJ.get_poistives(input('>>> Enter number of barists: \n'))
+        barista_number = IJ.get_poistives(input('>>> Enter the number of recruitment baristas: \n'))
         for i in range(int(barista_number)):
-            name = input('Enter barista name.\n')
-            name = barista_manager.is_exist(name)
-            special = input('Does the barista have a special? (y/n):')
-            if special == 'y':
-                special_type = input('Enter the special coffee type: ')
-                barista_manager.add_barista(name, month, is_special=True, special_type=special_type)
-            else:
-                barista_manager.add_barista(name, month, is_special=False, special_type=None)
+            barista_manager.hire_barista(month)
+
+        fire_barista_option = input('Do you want to fire a barista? (y/n): ')
+        if fire_barista_option.lower() == 'y':
+            number = IJ.get_poistives(input('>>> Enter number of barists: \n'))
+            for i in range(number):
+                barista_manager.fire_barista()
 
         # 导出咖啡师的参数 并将参数导入到材料管理类中
         baristas = barista_manager.show_barista()

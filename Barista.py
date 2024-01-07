@@ -36,6 +36,20 @@ class BaristaManager:
             del self.barista[name]
             print(f'barista {name} is been removed')
 
+    def hire_barista(self,month):
+        name = input('Enter barista name:\n')
+        name = self.is_exist(name)
+        special = input('Does the barista have a special? (y/n):')
+        if special == 'y':
+            special_type = input('Enter the special coffee type: ')
+            self.add_barista(name, month, is_special=True, special_type=special_type)
+        else:
+            self.add_barista(name, month, is_special=False, special_type=None)
+
+    def fire_barista(self):
+        name = input('Enter the name of the barista to be fired:\n')
+        self.remove_barista(name)
+
     # 计算劳动力
     def get_barista_labour(self):
         return 80 * 60 * len(self.barista)

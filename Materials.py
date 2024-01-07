@@ -53,8 +53,8 @@ class MaterialsManager:
                     rate = 1.0
 
             # 打印参数 以便判断
-            print(baristas)
-            print(rate)
+            # print(baristas)
+            # print(rate)
 
             if labour < coffee['time'] * amount * rate:
                 capacity = labour // coffee['time']
