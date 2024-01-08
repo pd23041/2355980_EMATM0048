@@ -1,3 +1,9 @@
+# Barista management system
+# Barista add subtract function
+# Labor force calculation
+# Employee payroll calculation
+
+
 class BaristaManager:
     def __init__(self):
         self.barista = {}
