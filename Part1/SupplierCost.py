@@ -1,3 +1,7 @@
+# Supplier system
+# Supplier expenditure accounting
+
+
 class ExpenditureManager:
     def __init__(self, materials_manager):
         self.materials_manager = materials_manager
