@@ -1,3 +1,7 @@
+# Cash management system
+# Cash calculation at the beginning and end of the month
+
+
 class Cash:
     def __init__(self):
         self.cash = 10000
