@@ -1,3 +1,6 @@
+#  Determine whether the input is correct
+
+
 # Determine if the input is legal Contains a range of values
 def get_poistives(number):
     while True:
