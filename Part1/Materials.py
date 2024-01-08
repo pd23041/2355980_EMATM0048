@@ -1,3 +1,10 @@
+# Coffee management system
+# Coffee material inventory update
+# Coffee demand update
+# Coffee revenue
+# Material storage costing
+
+
 import InputJudgment as IJ
 
 class MaterialsManager:
