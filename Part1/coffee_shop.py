@@ -1,3 +1,7 @@
+# Coffee shop simulation application system
+# Determine whether to continue operating
+
+
 import Barista as Br
 import Materials as Mat
 import Cash
