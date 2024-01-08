@@ -1,3 +1,7 @@
+# The main program runs the script
+# Realize coffee shop application simulation function
+
+
 import coffee_shop
 
 
